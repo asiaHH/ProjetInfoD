@@ -1,5 +1,3 @@
-
-
 CREATE TABLE Reviews (
     idReviews INT PRIMARY KEY,
     Review_count INT,
@@ -35,21 +33,34 @@ CREATE TABLE Year (
 );
 
 CREATE TABLE Business (
-    idBusiness INT PRIMARY KEY,
-    businessIdentifier VARCHAR2(50) 
-);
-    -- Une chaine de caractère de peut pas être identifiant
-    --  Donc on déporte l'identifiant dans une autre table 
-
-CREATE TABLE Entity (
-    idE INT PRIMARY KEY, -- On met un id pour chaque entité
-    idBusiness INT REFERENCES Business(idBusiness),
-    --idCat INT REFERENCES Categories(idCat),
+    idBusiness INT PRIMARY KEY, -- On met un id pour chaque entité
+    idInfo INT REFERENCES BusinessInfo(idInfo),
+    idCat INT REFERENCES Categories(idCat),
     idReviews INT REFERENCES Reviews(idReviews),
-    --idAtt INT REFERENCES Attributes(idAtt),
+    idAtt INT REFERENCES Attributes(idAtt),
     idLoc INT REFERENCES Localisation(idLoc),
     idHours INT REFERENCES Hours(idHours),
     idYears INT REFERENCES Year(idYears),
     Stars NUMBER(2,1),
-    Evolution NUMBER(5,2)
+    Evolution NUMBER(5,2),
 );
+
+CREATE TABLE Categories (
+    idCat INT PRIMARY KEY,
+);
+
+CREATE TABLE Attributes (
+    idAtt INT PRIMARY KEY,
+);
+
+CREATE TABLE CategoriesList (
+    idCat INT REFERENCES Categories(idCat),
+    nom VARCHAR2(100)
+);
+
+CREATE TABLE AttributesList (
+    idAtt INT REFERENCES Attributes(idAtt),
+    nom VARCHAR2(100)
+);
+
+ALTER TABLE Business ADD CONSTRAINT unicite UNIQUE (idInfo, idCat, idReviews, idAtt, idLoc, idHours, idYears);
